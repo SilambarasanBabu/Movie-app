@@ -45,13 +45,16 @@ const Login = () => {
       )
         .then((userCredential) => {
           const user = userCredential.user;
-          console.log(user, "user");
+
           // ...
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          console.log(errorCode + "-" + errorMessage);
+          if (errorCode || errorMessage) {
+            setErrorMessage("Please try again");
+          }
+
           // ..
         });
     } else {
@@ -64,13 +67,14 @@ const Login = () => {
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
-          console.log(user, "user");
           // ...
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          console.log(errorCode + "-" + errorMessage);
+          if (errorCode || errorMessage) {
+            setErrorMessage("Please try again");
+          }
         });
     }
   };
