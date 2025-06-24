@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import Header from "./Header";
-import { checkValidate } from "../utils/validate";
+import { checkValidate, checkValidateFullname } from "../utils/validate";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -16,14 +16,26 @@ const Login = () => {
   const password = useRef(null);
   const userName = useRef(null);
 
-  //hamdled form submition and validation here
+  //handled form submition
   const handleButton = () => {
-    // const userNameVal = isSignInForm ? null : userName.current?.value;
+    //logic for handling form validation
+    if (!isSignInForm) {
+      const nameMessage = checkValidateFullname(userName.current.value);
+      if (nameMessage) {
+        setErrorMessage(nameMessage);
+        return;
+      }
+    }
+
     const message = checkValidate(email.current.value, password.current.value);
-    setErrorMessage(message);
+    if (message) {
+      setErrorMessage(message);
+      return;
+    }
 
-    if (message) return;
+    setErrorMessage(null);
 
+    //auth with fire base
     if (!isSignInForm) {
       //sign up logic
       createUserWithEmailAndPassword(
@@ -32,7 +44,6 @@ const Login = () => {
         password.current.value
       )
         .then((userCredential) => {
-          // Signed up
           const user = userCredential.user;
           console.log(user, "user");
           // ...
@@ -41,7 +52,6 @@ const Login = () => {
           const errorCode = error.code;
           const errorMessage = error.message;
           console.log(errorCode + "-" + errorMessage);
-
           // ..
         });
     } else {

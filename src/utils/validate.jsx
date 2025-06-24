@@ -9,3 +9,11 @@ export const checkValidate = (email, password) => {
 
   return null;
 };
+
+export const checkValidateFullname = (name) => {
+  const isNameValid = /^[a-zA-Z]+(?: [a-zA-Z]+)*$/.test(name.trim());
+
+  if (!isNameValid) return "Enter a full name";
+
+  return null;
+};
