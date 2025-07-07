@@ -1,14 +1,17 @@
 import { signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const navigate = useNavigate();
+  const user = useSelector((store) => store.user);
+  console.log(user);
   const handleSignOut = () => {
     signOut(auth)
       .then(() => {
         // Sign-out successful.
+
         navigate("/");
       })
       .catch((error) => {
@@ -23,19 +26,17 @@ const Header = () => {
         src="https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png"
         alt="logo"
       />
-      <div className="flex mt-3">
-        <img
-          className="w-12 h-12"
-          src="https://occ-0-2086-2164.1.nflxso.net/dnm/api/v6/vN7bi_My87NPKvsBoib006Llxzg/AAAABaSDR-kTPhPYcVVGSsV0jC3D-Q5HZSFE6fjzAM-4cMpltx1Gw9AV7OTnL8sYnC6CBxOBZQEAJLjStt822uD2lctOvNR05qM.png?r=962"
-          alt="user icon"
-        />
-        <button
-          onClick={handleSignOut}
-          className=" text-white bg-red-500 ml-4 h-12 p-1.5 rounded-xl cursor-pointer"
-        >
-          Sign Out
-        </button>
-      </div>
+      {user && (
+        <div className="flex mt-3">
+          <img className="w-12 h-12" src={user?.photoURL} alt="user icon" />
+          <button
+            onClick={handleSignOut}
+            className=" text-white bg-red-500 ml-4 h-12 p-1.5 rounded-xl cursor-pointer"
+          >
+            Sign Out
+          </button>
+        </div>
+      )}
     </div>
   );
 };
